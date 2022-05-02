@@ -12,20 +12,19 @@ import javax.servlet.http.HttpSession;
 
 import domain.LoginVO;
 import domain.MyPageDTO;
-import service.MyPageService;
 import service.MyPageServiceImpl;
 
 /**
- * Servlet implementation class MyPageController
+ * Servlet implementation class MyModiController
  */
-@WebServlet("/MyPage")
-public class MyPageController extends HttpServlet {
+@WebServlet("/MyModi")
+public class MyModiController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MyPageController() {
+    public MyModiController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,7 +33,6 @@ public class MyPageController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
 		HttpSession session = request.getSession();
 		MyPageDTO dto = new MyPageDTO();
 		dto.setUid((String)session.getAttribute("sessId"));
@@ -45,7 +43,7 @@ public class MyPageController extends HttpServlet {
 		
 		request.setAttribute("vo", vo);
 		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("views/mypage.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("views/mymodi.jsp");
 		dispatcher.forward(request, response);
 	}
 
