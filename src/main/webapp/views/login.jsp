@@ -17,7 +17,7 @@
 		<img src="./img/logo.png">
 
 		<div class="a01">
-			<form method="post" action="loginAct.jsp">
+			<form method="post" action="">
 				<div>
 					<span>ID</span><input type="text" name="uid">
 				</div>

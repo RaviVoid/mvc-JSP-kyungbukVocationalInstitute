@@ -8,6 +8,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import domain.LoginDTO;
+import domain.LoginVO;
+import service.LoginServiceImpl;
 
 /**
  * Servlet implementation class LoginController
@@ -28,19 +33,44 @@ public class LoginController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("views/login.jsp");
 		dispatcher.forward(request, response);
-		//response.sendRedirect("login.jsp");
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		request.setCharacterEncoding("UTF-8");
+		
+		String uid = request.getParameter("uid");
+		String upw = request.getParameter("upw");
+		
+		LoginDTO dto = new LoginDTO();
+		dto.setUid(uid);
+		dto.setUpw(upw);
+		
+		LoginServiceImpl service = new LoginServiceImpl();
+		LoginVO vo = service.read(dto);
+		
+		if(vo != null) {
+			//true이면 세션생성 및 마이페이지로 이동
+			HttpSession session = request.getSession();
+			session.setAttribute("sessId", vo.getUid());
+			session.setAttribute("sessName", vo.getUname());
+			session.setAttribute("sessSchName", vo.getSchoolname());
+			
+			response.sendRedirect("MyPage");
+			
+		} else {
+			//false이면 로그인페이지로 이동
+			response.sendRedirect("Login");
+		}
 	}
 
 }
+
+
+
+
+
