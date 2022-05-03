@@ -5,13 +5,15 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import domain.LoginVO;
-import domain.MyModiDTO;
+import domain.UseHistoryVO;
 
-public class MyModiMapper {
+public class ListMapper {
 
-	public LoginVO read(MyModiDTO dto) {
+	public Collection<UseHistoryVO> read(String uid, String status) {
 		String url = "jdbc:mysql://localhost:3306/garam?characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
 		String user = "root";
 		String password = "smart";
@@ -20,36 +22,38 @@ public class MyModiMapper {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		
+		ArrayList<UseHistoryVO> list = new ArrayList<UseHistoryVO>();
+		
 		try {
 			StringBuffer qry = new StringBuffer();
-			qry.append(" SELECT * FROM g_member ");
-			qry.append(" WHERE uid = ? ");
-						
+			qry.append(" SELECT * FROM g_usehistory ");
+			qry.append(" WHERE uid = ? AND status = ? ");
+			qry.append(" ORDER BY bpdate DESC ");
+
 			String sql = qry.toString();
 			
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection(url, user, password);
 			
 			stmt = conn.prepareStatement(sql);
-			stmt.setString(1, dto.getUid());
 
-			rs = stmt.executeQuery();
+			stmt.setString(1, uid);
+			stmt.setString(2, status);
 			
-			if(rs.next()) {
-				LoginVO vo = new LoginVO();
+			rs = stmt.executeQuery();
+			UseHistoryVO vo = null;
+			
+			while(rs.next()) {
+				vo = new UseHistoryVO();
 
-				vo.setNum(rs.getLong("num"));
-				vo.setUname(rs.getString("uname"));
-				vo.setSchoolname(rs.getString("schoolname"));
-				vo.setGradeclass(rs.getString("gradeclass"));
+				vo.setNum(rs.getInt("num"));
 				vo.setUid(rs.getString("uid"));
-				vo.setUpw(rs.getString("upw"));
-				vo.setRoute(rs.getString("route"));
-				vo.setBoardingplace(rs.getString("boardingplace"));
-				vo.setJoindate(rs.getDate("joindate"));
-				vo.setCoupon(rs.getInt("coupon"));
+				vo.setStatus(rs.getString("status"));
+				vo.setStart(rs.getString("start"));
+				vo.setEnd(rs.getString("end"));
+				vo.setBpdate(rs.getDate("bpdate"));
 				
-				return vo;
+				list.add(vo);
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -64,7 +68,12 @@ public class MyModiMapper {
 				e.printStackTrace();
 			}
 		}
-		return null;
+		return list;
 	}
 
 }
+
+
+
+
+

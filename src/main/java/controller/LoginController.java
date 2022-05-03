@@ -59,13 +59,6 @@ public class LoginController extends HttpServlet {
 			session.setAttribute("sessId", vo.getUid());
 			session.setAttribute("sessName", vo.getUname());
 			session.setAttribute("sessSchName", vo.getSchoolname());
-			//session.setAttribute("sessGradeClass", vo.getGradeclass());
-			//session.setAttribute("sessRoute", vo.getRoute());
-			//session.setAttribute("sessBoardingplace", vo.getBoardingplace());
-			//session.setAttribute("sessJoindate", vo.getJoindate());
-			//session.setAttribute("sessCoupon", vo.getCoupon());
-			
-			
 			
 			response.sendRedirect("MyPage");
 			

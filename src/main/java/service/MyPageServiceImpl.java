@@ -11,4 +11,10 @@ public class MyPageServiceImpl implements MyPageService {
 		return new MyPageMapper().read(dto);
 	}
 
+	@Override
+	public void update(LoginVO vo) {
+		new MyPageMapper().update(vo);
+	}
+
+
 }
